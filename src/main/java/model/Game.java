@@ -2,6 +2,8 @@ package model;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.util.UUID;
 
@@ -9,9 +11,8 @@ public class Game {
 
     private final String id;
     private final StringProperty name = new SimpleStringProperty();
-
-    // TODO: definisati ObservableList<Role> roles
-    // TODO: definisati ObservableList<Team> teams
+    private final ObservableList<Role> roles = FXCollections.observableArrayList();
+    private final ObservableList<Team> teams = FXCollections.observableArrayList();
 
     public Game(String name) {
         this.id = UUID.randomUUID().toString();
@@ -31,11 +32,37 @@ public class Game {
 
     public StringProperty nameProperty() { return name; }
 
-    // TODO: getRoles(), getTeams()
-    // TODO: findRole(roleId)
-    // TODO: findTeam(teamId) nznm
-    // TODO: addRole(role), removeRole(role)
-    // TODO: addTeam(team), removeTeam(team) ??
+    public ObservableList<Role> getRoles() { return roles; }
+
+    public ObservableList<Team> getTeams() { return teams; }
+
+    public Role findRole(String roleId) {
+        if (roleId == null) return null;
+        return roles.stream()
+                .filter(r -> r != null && roleId.equals(r.getId()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public Team findTeam(String teamId) {
+        if (teamId == null) return null;
+        return teams.stream().filter(t -> t.getId().equals(teamId)).findFirst().orElse(null);
+    }
+
+    public void addRole(Role role) { roles.add(role); }
+
+    public void removeRole(Role role) {
+        roles.remove(role);
+        for (Team t : teams) {
+            t.getPlayers().forEach(p -> {
+                if (role.getId().equals(p.getRoleId())) p.setRoleId(null);
+            });
+        }
+    }
+
+    public void addTeam(Team team) { teams.add(team); }
+
+    public void removeTeam(Team team) { teams.remove(team); }
 
     @Override
     public String toString() { return getName(); }
