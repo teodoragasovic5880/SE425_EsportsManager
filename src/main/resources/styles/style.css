@@ -1,0 +1,195 @@
+.root {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 13px;
+    -fx-base: #1e2a44;
+    -fx-background: #1a1f2e;
+}
+
+.topbar {
+    -fx-background-color: linear-gradient(to bottom, #2c3a5e, #243052);
+    -fx-padding: 4 10 4 10;
+    -fx-border-color: transparent transparent #131a2c transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.toolbar {
+    -fx-background-color: transparent;
+    -fx-spacing: 6;
+}
+
+.app-title {
+    -fx-text-fill: #e6eefc;
+    -fx-font-weight: bold;
+    -fx-font-size: 17px;
+    -fx-padding: 0 8 0 4;
+}
+
+.sidebar {
+    -fx-background-color: #20283b;
+    -fx-padding: 10;
+    -fx-border-color: transparent #131a2c transparent transparent;
+    -fx-border-width: 0 1 0 0;
+}
+
+.section-title {
+    -fx-text-fill: #8899bb;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+    -fx-letter-spacing: 1px;
+}
+
+.games-list {
+    -fx-background-color: #262f47;
+    -fx-control-inner-background: #262f47;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+}
+.games-list .list-cell {
+    -fx-text-fill: #d6def0;
+    -fx-padding: 8 10;
+}
+.games-list .list-cell:filled:selected {
+    -fx-background-color: #3457a0;
+    -fx-text-fill: white;
+}
+
+.count-label {
+    -fx-text-fill: #6b7a99;
+    -fx-font-size: 11px;
+}
+
+.content {
+    -fx-padding: 12;
+    -fx-background-color: #1a1f2e;
+    -fx-spacing: 6;
+}
+
+.game-header {
+    -fx-background-color: #232c44;
+    -fx-padding: 10 14;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+}
+
+.muted { -fx-text-fill: #8899bb; }
+.game-name {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+.roles-label {
+    -fx-text-fill: #9fb4d6;
+}
+
+.panel-title {
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+.pool-box {
+    -fx-background-color: #232c44;
+    -fx-background-radius: 8;
+    -fx-padding: 10;
+    -fx-border-radius: 8;
+}
+
+.player-list {
+    -fx-background-color: #2a3450;
+    -fx-control-inner-background: #2a3450;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: #3a4869;
+}
+.player-list .list-cell {
+    -fx-text-fill: #e0e6f5;
+    -fx-padding: 6 10;
+    -fx-background-radius: 4;
+}
+.player-list .list-cell:filled:hover {
+    -fx-background-color: #34406a;
+}
+.player-list .list-cell:selected {
+    -fx-background-color: #3f5fae;
+    -fx-text-fill: white;
+}
+
+.hint {
+    -fx-text-fill: #6b7a99;
+    -fx-font-size: 11px;
+    -fx-padding: 4 0 0 0;
+}
+
+.teams-scroll {
+    -fx-background: #1a1f2e;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.teams-container {
+    -fx-padding: 4;
+}
+
+.team-card {
+    -fx-background-color: #232c44;
+    -fx-background-radius: 8;
+    -fx-padding: 10;
+    -fx-border-radius: 8;
+    -fx-border-color: #2e3a5c;
+    -fx-border-width: 1;
+}
+
+.team-name {
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+}
+
+.roster-label {
+    -fx-text-fill: #8899bb;
+    -fx-font-size: 11px;
+}
+
+.delete-btn {
+    -fx-background-color: #8a2a3a;
+    -fx-text-fill: white;
+    -fx-background-radius: 4;
+    -fx-min-width: 24;
+    -fx-padding: 2 8;
+}
+.delete-btn:hover {
+    -fx-background-color: #b33246;
+}
+
+.save-btn {
+    -fx-background-color: #2a7a3f;
+    -fx-text-fill: white;
+}
+.save-btn:hover {
+    -fx-background-color: #338f4c;
+}
+
+.empty-hint {
+    -fx-text-fill: #6b7a99;
+    -fx-padding: 20;
+}
+
+.statusbar {
+    -fx-background-color: #15192a;
+    -fx-padding: 6 12;
+    -fx-border-color: #0f1322 transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+}
+.status {
+    -fx-text-fill: #7d8bad;
+    -fx-font-size: 12px;
+}
+
+.button {
+    -fx-background-color: #34406a;
+    -fx-text-fill: #e0e6f5;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+.button:hover {
+    -fx-background-color: #40528a;
+}

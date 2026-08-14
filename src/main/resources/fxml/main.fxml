@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.MainController" stylesheets="@../styles/style.css">
+
+    <top>
+        <VBox spacing="2" styleClass="topbar">
+            <ToolBar styleClass="toolbar">
+                <Label text="Esport Team Manager" styleClass="app-title"/>
+                <Region HBox.hgrow="ALWAYS" prefWidth="200"/>
+                <Button text="+ Nova igra" onAction="#onAddGame"/>
+                <Button text="Dodaj ulogu" onAction="#onAddRole"/>
+                <Button text="Novi igrac" onAction="#onAddPlayer"/>
+                <Button text="Novi tim" onAction="#onAddTeam"/>
+                <Separator/>
+                <Button text="Sacuvaj" onAction="#onSave" styleClass="save-btn"/>
+            </ToolBar>
+        </VBox>
+    </top>
+
+    <left>
+        <VBox spacing="6" prefWidth="230" styleClass="sidebar">
+            <Label text="IGRE" styleClass="section-title"/>
+            <ListView fx:id="gamesList" VBox.vgrow="ALWAYS" styleClass="games-list"/>
+            <Label fx:id="gameCountLabel" styleClass="count-label"/>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox spacing="8" styleClass="content">
+            <HBox spacing="12" alignment="CENTER_LEFT" styleClass="game-header">
+                <Label text="Igra:" styleClass="muted"/>
+                <Label fx:id="selectedGameLabel" text="Nema selektovane igre" styleClass="game-name"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="rolesLabel" text="" styleClass="roles-label"/>
+            </HBox>
+
+            <SplitPane dividerPositions="0.32" VBox.vgrow="ALWAYS">
+                <VBox spacing="6" styleClass="pool-box">
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Label text="Slobodni igraci" styleClass="panel-title"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="poolCountLabel" styleClass="count-label"/>
+                    </HBox>
+                    <ListView fx:id="poolView" VBox.vgrow="ALWAYS" styleClass="player-list"/>
+                    <Label text="Prevuci igraca u tim sa desne strane" styleClass="hint"/>
+                </VBox>
+
+                <ScrollPane fx:id="teamsScroll" fitToWidth="true" styleClass="teams-scroll">
+                    <VBox fx:id="teamsContainer" spacing="12" styleClass="teams-container">
+                        <Label text="Trenutno nema timova. Klikni &quot;Novi tim&quot;." styleClass="empty-hint"/>
+                    </VBox>
+                </ScrollPane>
+            </SplitPane>
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox styleClass="statusbar">
+            <Label fx:id="statusLabel" text="Spreman." styleClass="status"/>
+        </HBox>
+    </bottom>
+</BorderPane>
