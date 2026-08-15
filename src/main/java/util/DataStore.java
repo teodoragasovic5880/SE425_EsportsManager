@@ -12,6 +12,7 @@ import model.Team;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,7 +40,7 @@ public class DataStore {
         }
         this.dataPath = dir.resolve(DATA_FILE);
 
-        // TODO: load() — deserijalizacija stanja iz JSON-a
+        // TODO: load() — deserijalizacija stanja iz JSON-a (vidi kasniji DTO refactor commit)
     }
 
     public ObservableList<Game> getGames() {
@@ -95,10 +96,37 @@ public class DataStore {
         return t;
     }
 
-    // TODO: removeTeam
-    // TODO: moveToTeam(player, game, targetTeam)
-    // TODO: moveToFreeAgents(player, game) premštanje igrača iz tima nazad u pool
+    public void removeTeam(Game game, Team team) {
+        ObservableList<Player> pool = getFreeAgents(game);
+        for (Player p : new ArrayList<>(team.getPlayers())) {
+            team.removePlayer(p);
+            pool.add(p);
+        }
+        game.removeTeam(team);
+    }
 
-    // TODO: save() — serijalizacija  u data.json sa DTO slojem
-    // TODO: load() — deserijalizacija iz data.json
+    public void moveToTeam(Player player, Game game, Team targetTeam) {
+        if (targetTeam != null && targetTeam.equals(player.getTeam())) return;
+
+        if (player.getTeam() != null) {
+            player.getTeam().getPlayers().remove(player);
+            player.setTeam(null);
+        } else {
+            getFreeAgents(game).remove(player);
+        }
+        targetTeam.addPlayer(player);
+    }
+
+    public void moveToFreeAgents(Player player, Game game) {
+        if (player.getTeam() != null) {
+            player.getTeam().getPlayers().remove(player);
+            player.setTeam(null);
+        } else {
+            return;
+        }
+        getFreeAgents(game).add(player);
+    }
+
+    // TODO: save() — serijalizacija stanja u data.json sa DTO slojem (razdvojenost perzistencije i modela)
+    // TODO: load() — deserijalizacija stanja iz data.json
 }
