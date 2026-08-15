@@ -5,15 +5,22 @@ import model.Player;
 import model.Role;
 import model.Team;
 import util.DataStore;
+import util.DragDropHelper;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class MainController {
@@ -28,13 +35,14 @@ public class MainController {
     @FXML private Label poolCountLabel;
 
     private DataStore store;
+    private DragDropHelper dd;
     private Game selectedGame;
-
-    // TODO: DragDropHelper dd — ubaciti u kasnijem commitu (P4)
+    private final List<ListView<Player>> teamViews = new ArrayList<>();
 
     @FXML
     public void initialize() {
         store = new DataStore();
+        dd = new DragDropHelper(store);
 
         gamesList.setCellFactory(lv -> new ListCell<>() {
             @Override
@@ -65,6 +73,7 @@ public class MainController {
     }
 
     private void refreshGameView() {
+        teamViews.clear();
         teamsContainer.getChildren().clear();
 
         if (selectedGame == null) {
@@ -94,7 +103,7 @@ public class MainController {
 
         poolView.setItems(store.getFreeAgents(selectedGame));
         poolCountLabel.setText(String.valueOf(store.getFreeAgents(selectedGame).size()));
-        // TODO: dd.configure(poolView, ...) — ubaciti nakon DragDropHelper commita
+        dd.configure(poolView, this::currentDragGame, () -> null);
 
         if (selectedGame.getTeams().isEmpty()) {
             teamsContainer.getChildren().add(new Label(
@@ -108,20 +117,63 @@ public class MainController {
         }
     }
 
-    // Privremena pojednostavljena verzija tim-kartice — dugme za brisanje i drag-drop dolaze u P4.
+    private DragDropHelper.DragGame currentDragGame() {
+        if (selectedGame == null) return null;
+        return new DragDropHelper.DragGame(selectedGame, this::refreshGameView);
+    }
+
     private VBox buildTeamCard(Team team) {
-        Label teamName = new Label(team.getName());
+        ListView<Player> teamView = new ListView<>();
+        teamView.setItems(team.getPlayers());
+        teamView.setPrefHeight(180);
+        teamView.getStyleClass().add("player-list");
+        final Team myTeam = team;
+        dd.configure(teamView, this::currentDragGame, () -> myTeam);
+        teamViews.add(teamView);
+
+        Label teamName = new Label();
+        teamName.textProperty().bind(team.nameProperty());
         teamName.getStyleClass().add("team-name");
 
-        ListView<Player> teamView = new ListView<>(team.getPlayers());
-        teamView.setPrefHeight(150);
-        teamView.getStyleClass().add("player-list");
-        // TODO: dd.configure(teamView, ...) — drag-and-drop target
-        // TODO: dugme "x" za brisanje tima (store.removeTeam) — nakon sto DataStore dobije removeTeam
+        Label roster = new Label();
+        roster.getStyleClass().add("roster-label");
 
-        VBox card = new VBox(6, teamName, teamView);
+        Button deleteBtn = new Button("x");
+        deleteBtn.getStyleClass().add("delete-btn");
+        deleteBtn.setOnAction(e -> {
+            Alert a = new Alert(Alert.AlertType.CONFIRMATION,
+                    "Obrisati tim \"" + team.getName() + "\"? Igraci ce biti vraceni u pool.",
+                    ButtonType.YES, ButtonType.NO);
+            a.setHeaderText(null);
+            Optional<ButtonType> r = a.showAndWait();
+            if (r.isPresent() && r.get() == ButtonType.YES) {
+                store.removeTeam(selectedGame, team);
+                store.save();
+                refreshGameView();
+                setStatus("Tim obrisan.");
+            }
+        });
+
+        HBox header = new HBox(10, teamName, new Region(), roster, deleteBtn);
+        header.setAlignment(Pos.CENTER_LEFT);
+        HBox.setHgrow(header.getChildren().get(1), Priority.ALWAYS);
+
+        VBox card = new VBox(6, header, teamView);
         card.getStyleClass().add("team-card");
+        VBox.setVgrow(card, Priority.NEVER);
+        VBox.setMargin(card, new Insets(0));
+
+        Runnable updateRoster = () -> {
+            roster.setText(team.getPlayers().size() + " igraca / " + countRoles(team) + " uloga");
+        };
+        team.getPlayers().addListener((ListChangeListener<Player>) c -> updateRoster.run());
+        updateRoster.run();
+
         return card;
+    }
+
+    private String countRoles(Team team) {
+        return String.valueOf(selectedGame.getRoles().size());
     }
 
     @FXML
@@ -133,7 +185,7 @@ public class MainController {
         Optional<String> r = d.showAndWait();
         if (r.isPresent() && !r.get().isBlank()) {
             Game g = store.addGame(r.get().trim());
-            // store.save();  // TODO: enable after save() is implemented in DataStore
+            store.save();
             gamesList.getSelectionModel().select(g);
             setStatus("Dodata igra: " + g.getName());
         }
@@ -167,7 +219,7 @@ public class MainController {
         Optional<Role> r = d.showAndWait();
         if (r.isPresent()) {
             store.addRole(g, r.get().getName());
-            // store.save();  // TODO: enable after save() is implemented in DataStore
+            store.save();
             refreshGameView();
             setStatus("Dodata uloga: " + r.get().getName());
         }
@@ -222,7 +274,7 @@ public class MainController {
         if (r.isPresent()) {
             Player p = r.get();
             store.getFreeAgents(g).add(p);
-            // store.save();  // TODO: enable after save() is implemented in DataStore
+            store.save();
             refreshGameView();
             setStatus("Dodat igrac: " + p.getUsername());
         }
@@ -240,7 +292,7 @@ public class MainController {
         Optional<String> r = d.showAndWait();
         if (r.isPresent() && !r.get().isBlank()) {
             store.addTeam(g, r.get().trim());
-            // store.save();  // TODO: enable after save() is implemented in DataStore
+            store.save();
             refreshGameView();
             setStatus("Dodat tim: " + r.get().trim());
         }
@@ -248,7 +300,7 @@ public class MainController {
 
     @FXML
     private void onSave() {
-        // store.save();  // TODO: enable after save() is implemented in DataStore
+        store.save();
         setStatus("Podaci sacuvani.");
     }
 

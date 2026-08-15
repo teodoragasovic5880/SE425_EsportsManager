@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="26137528-475f-4ee5-b6c3-eca5127e24f2" name="Changes" comment="Dodat Launcher entry point, popravljen pom.xml">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controller/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controller/MainController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/util/DataStore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/DataStore.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -55,7 +56,7 @@
   &quot;associatedIndex&quot;: 6
 }</component>
   <component name="ProjectId" id="3Hrvx2SvAXFUs6lCSXOJ5PxArVs" />
-  <component name="ProjectLevelVcsManager">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="1" id="Add" />
   </component>
   <component name="ProjectViewState">
